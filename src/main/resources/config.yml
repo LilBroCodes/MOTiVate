@@ -1,0 +1,7 @@
+# Refer to the wiki for how to configure
+
+messages:
+  - primary: 'This is message 1, line 1.'
+    secondary: 'This is message 1, line 2.'
+  - primary: 'This is message 2, line 1.'
+    secondary: 'This is message 2, line 2.'
