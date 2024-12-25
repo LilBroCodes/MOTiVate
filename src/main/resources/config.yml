@@ -1,7 +1,15 @@
-# Refer to the wiki for how to configure
+# This is a template for a configuration.
+# A message requires the primary and secondary fields, the 'require-player-data' field is false by default.
+# Placeholders are automatically replaced if PlaceholderAPI is installed.
+# If 'require-player-data' is set to true, then the stored player data will be used (if found).
+# Make sure to have at least one message that doesn't need player data, because if they all tho then they all will be skipped.
+# You can also use formatting codes for this. (&a, &k...)
 
 messages:
   - primary: 'This is message 1, line 1.'
     secondary: 'This is message 1, line 2.'
-  - primary: 'This is message 2, line 1.'
-    secondary: 'This is message 2, line 2.'
+    requires-player-data: false
+  - primary: 'Hello, '
+    secondary: '%player_name%!' # This uses the Player extension of PlaceholderAPI, download using /papi ecloud download Player
+    requires-player-data: true
+

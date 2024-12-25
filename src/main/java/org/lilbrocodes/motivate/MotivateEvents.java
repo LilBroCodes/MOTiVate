@@ -18,7 +18,8 @@ public class MotivateEvents implements Listener {
     @EventHandler
     public void onServerListPing(ServerListPingEvent event) {
         MOTD motd = plugin.generateMOTD(event.getAddress().getHostName().replace(".", "_"));
-        event.setMotd(motd.primary + "\n" + motd.secondary);
+        if (motd.primary.equals("FAIL") && motd.requirePlayerData) event.setMotd("§4ERROR §7§l| §r§f" + motd.secondary);
+        else event.setMotd(motd.primary + "\n" + motd.secondary);
     }
 
     @EventHandler

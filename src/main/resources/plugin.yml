@@ -8,3 +8,10 @@ description: Plugin allowing for very detailed MOTD customization
 website: motivate.x10.mx
 softdepend:
   - PlaceholderAPI
+commands:
+  motivate:
+    description: Main command for MOTiVate
+    usage: /motivate <>
+    aliases: [ "motd" ]
+    permission: motivate.motivate
+    permission-message: You do not have permission to execute this command.
