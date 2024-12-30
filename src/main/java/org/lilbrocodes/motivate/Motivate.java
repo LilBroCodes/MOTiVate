@@ -50,6 +50,7 @@ public final class Motivate extends JavaPlugin {
                 return "Broken config";
             }
         }));
+        metrics.addCustomChart(new Metrics.SimplePie("version", () -> getDescription().getVersion()));
     }
 
     @Override

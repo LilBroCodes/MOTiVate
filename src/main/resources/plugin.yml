@@ -1,5 +1,5 @@
 name: MOTiVate
-version: '1.0'
+version: '1.1'
 main: org.lilbrocodes.motivate.Motivate
 api-version: '1.20'
 prefix: MOTiVate
