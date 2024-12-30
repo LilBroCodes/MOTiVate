@@ -12,7 +12,7 @@ import org.lilbrocodes.motivate.common.MOTD;
 import org.lilbrocodes.motivate.implementation.Metrics;
 
 import java.io.IOException;
-import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 public final class Motivate extends JavaPlugin {
@@ -69,7 +69,7 @@ public final class Motivate extends JavaPlugin {
     }
 
     public void writeConfig() throws IOException {
-        config.save(Path.of(getDataFolder().toString(), "config.yml").toString());
+        config.save(Paths.get(getDataFolder().toString(), "config.yml").toString());
     }
 
     private InspectionResult validateMessages() {
@@ -83,8 +83,11 @@ public final class Motivate extends JavaPlugin {
         for (int i = 0; i < Objects.requireNonNull(messages).size(); i++) {
             Object item = messages.get(i);
 
-            if (!(item instanceof Map<?, ?> message)) {
+            Map<?, ?> message = null;
+            if (!(item instanceof Map<?, ?>)) {
                 return new InspectionResult(false, "Message #" + (i + 1) + " must be a map.");
+            } else {
+                message = (Map<?, ?>) item;
             }
 
             if (!message.containsKey("primary") || !(message.get("primary") instanceof String)) {
@@ -118,7 +121,15 @@ public final class Motivate extends JavaPlugin {
         List<Map<?, ?>> toRemove = new ArrayList<>();
         if (!hasPlayerData) {
             for (Map<?, ?> message : messages) {
-                boolean requireData = (boolean) message.get("requires-player-data");
+                Object requiresPlayerData = message.get("requires-player-data");
+                boolean requireData;
+                if (requiresPlayerData instanceof Boolean) {
+                    requireData = (Boolean) requiresPlayerData;
+                } else if (requiresPlayerData instanceof String) {
+                    requireData = Boolean.parseBoolean((String) requiresPlayerData);
+                } else {
+                    requireData = false;
+                }
                 if (requireData) {
                     toRemove.add(message);
                 }
@@ -131,7 +142,16 @@ public final class Motivate extends JavaPlugin {
             return new MOTD("§4ERROR §7§l| §r§fNo player data present, and no", "§fmessage that doesn't need it was found.", false);
         } else {
             Map<?, ?> message = messages.get(randomId);
-            MOTD motd = new MOTD((String) message.get("primary"), (String) message.get("secondary"), (boolean) message.get("requires-player-data"));
+            Object requiresPlayerData = message.get("requires-player-data");
+            boolean requireData;
+            if (requiresPlayerData instanceof Boolean) {
+                requireData = (Boolean) requiresPlayerData;
+            } else if (requiresPlayerData instanceof String) {
+                requireData = Boolean.parseBoolean((String) requiresPlayerData);
+            } else {
+                requireData = false;
+            }
+            MOTD motd = new MOTD((String) message.get("primary"), (String) message.get("secondary"), requireData);
 
             if (placeholderAPIEnabled) {
                 if (motd.requirePlayerData) {
@@ -149,7 +169,16 @@ public final class Motivate extends JavaPlugin {
     }
 
     public MOTD getMOTD(Map<?, ?> message, String hostName) {
-        MOTD motd = new MOTD((String) message.get("primary"), (String) message.get("secondary"), (boolean) message.get("requires-player-data"));
+        Object requiresPlayerData = message.get("requires-player-data");
+        boolean requireData;
+        if (requiresPlayerData instanceof Boolean) {
+            requireData = (Boolean) requiresPlayerData;
+        } else if (requiresPlayerData instanceof String) {
+            requireData = Boolean.parseBoolean((String) requiresPlayerData);
+        } else {
+            requireData = false;
+        }
+        MOTD motd = new MOTD((String) message.get("primary"), (String) message.get("secondary"), requireData);
 
         if (placeholderAPIEnabled) {
             if (motd.requirePlayerData) {
@@ -180,11 +209,11 @@ public final class Motivate extends JavaPlugin {
     }
 
     public static String pluginNotFound(String name) {
-        return String.format("%s%s not found.%s".formatted(rgb(255, 0, 0), name, "\u001B[0m"));
+        return String.format(String.format("%s%s not found.%s", rgb(255, 0, 0), name, "\u001B[0m"));
     }
 
     public static String pluginFound(String name) {
-        return String.format("%s%s found and hooked.%s".formatted(rgb(0, 255, 0), name, "\u001B[0m"));
+        return String.format(String.format("%s%s found and hooked.%s", rgb(0, 255, 0), name, "\u001B[0m"));
     }
 
     public void sendMessage(CommandSender sender, String message) {

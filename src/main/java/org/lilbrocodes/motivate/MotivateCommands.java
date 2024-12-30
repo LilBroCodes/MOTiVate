@@ -60,7 +60,12 @@ public class MotivateCommands implements CommandExecutor, TabCompleter {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length == 1) {
-            return  List.of("list", "remove", "show", "reload");
+            List<String> list = new ArrayList<>();
+            list.add("list");
+            list.add("remove");
+            list.add("show");
+            list.add("reload");
+            return list;
         }
         if (args[0].equalsIgnoreCase("show") || args[0].equalsIgnoreCase("remove")) {
             List<Map<?, ?>> messages = plugin.config.getMapList("messages");
@@ -70,12 +75,15 @@ public class MotivateCommands implements CommandExecutor, TabCompleter {
             }
             return tab;
         }
-        return List.of();
+        return new ArrayList<>();
     }
     
     private void handleListCommand(@NotNull CommandSender sender) {
         String hostName = "";
-        if (sender instanceof Player player) hostName = Objects.requireNonNull(player.getAddress()).getHostName().replace(".", "_");
+        if (sender instanceof Player) {
+            Player player = (Player) sender;
+            hostName = Objects.requireNonNull(player.getAddress()).getHostName().replace(".", "_");
+        }
 
         plugin.reloadConfigC();
         List<Map<?, ?>> messages = plugin.config.getMapList("messages");
@@ -91,7 +99,10 @@ public class MotivateCommands implements CommandExecutor, TabCompleter {
 
     private void handleShowCommand(@NotNull CommandSender sender, int id) {
         String hostName = "";
-        if (sender instanceof Player player) hostName = Objects.requireNonNull(player.getAddress()).getHostName().replace(".", "_");
+        if (sender instanceof Player) {
+            Player player = (Player) sender;
+            hostName = Objects.requireNonNull(player.getAddress()).getHostName().replace(".", "_");
+        }
 
         plugin.reloadConfigC();
         List<Map<?, ?>> messages = plugin.config.getMapList("messages");

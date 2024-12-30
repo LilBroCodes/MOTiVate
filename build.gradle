@@ -39,7 +39,7 @@ dependencies {
 }
 
 
-def targetJavaVersion = 17
+def targetJavaVersion = 8
 java {
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)
     sourceCompatibility = javaVersion
@@ -75,6 +75,6 @@ jar {
 }
 
 runServer {
-    version "1.20.1"
+    version "1.21.4"
 }
 
