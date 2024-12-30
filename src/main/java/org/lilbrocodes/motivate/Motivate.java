@@ -9,6 +9,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.lilbrocodes.motivate.common.InspectionResult;
 import org.lilbrocodes.motivate.common.MOTD;
+import org.lilbrocodes.motivate.implementation.Metrics;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -39,6 +40,16 @@ public final class Motivate extends JavaPlugin {
         MotivateCommands commands = new MotivateCommands(this);
         Objects.requireNonNull(getCommand("motivate")).setExecutor(commands);
         Objects.requireNonNull(getCommand("motivate")).setTabCompleter(commands);
+
+        Metrics metrics = new Metrics(this, 24271);
+        metrics.addCustomChart(new Metrics.SimplePie("messages", () -> {
+            InspectionResult inspection = validateMessages();
+            if (inspection.success()) {
+                return String.valueOf(config.getMapList("messages").size());
+            } else {
+                return "Broken config";
+            }
+        }));
     }
 
     @Override
