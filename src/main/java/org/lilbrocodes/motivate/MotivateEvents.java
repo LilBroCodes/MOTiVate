@@ -24,6 +24,6 @@ public class MotivateEvents implements Listener {
 
     @EventHandler
     public void savePlayerUUID(PlayerJoinEvent event) {
-        plugin.UUID_STORAGE.saveIfNotExists(Objects.requireNonNull(event.getPlayer().getAddress()).getHostName().replace(".", "_"), event.getPlayer().getUniqueId());
+        plugin.UUID_STORAGE.saveIfNotExists(Objects.requireNonNull(event.getPlayer().getAddress()).getHostName().replace(".", "_"), event.getPlayer().getUniqueId(), event.getPlayer().getName());
     }
 }

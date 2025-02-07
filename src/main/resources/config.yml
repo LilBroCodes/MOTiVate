@@ -5,6 +5,10 @@
 # Make sure to have at least one message that doesn't need player data, because if they all tho then they all will be skipped.
 # You can also use formatting codes for this. (&a, &k...)
 
+# You can use this to disable the storing of player data.
+# This will make it so that requires-player-data is ALWAYS true for all messages, and so that player data is deleted.
+store-player-data: true
+
 messages:
   - primary: 'This is message 1, line 1.'
     secondary: 'This is message 1, line 2.'

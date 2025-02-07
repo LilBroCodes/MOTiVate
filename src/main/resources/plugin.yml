@@ -1,10 +1,9 @@
 name: MOTiVate
-version: '1.1'
+version: '1.2'
 main: org.lilbrocodes.motivate.Motivate
 prefix: MOTiVate
 authors: [ LilBroCodes ]
 description: Plugin allowing for very detailed MOTD customization
-website: motivate.x10.mx
 softdepend:
   - PlaceholderAPI
 commands:

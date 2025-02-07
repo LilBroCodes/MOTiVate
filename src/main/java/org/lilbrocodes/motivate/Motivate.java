@@ -14,17 +14,19 @@ import org.lilbrocodes.motivate.implementation.Metrics;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.logging.Logger;
 
 public final class Motivate extends JavaPlugin {
     public MotivateUUIDStorage UUID_STORAGE;
-
     public boolean placeholderAPIEnabled = false;
     public FileConfiguration config;
+    public final Logger logger = getLogger();
 
     @Override
     public void onEnable() {
+        loadConfig();
         Plugin placeholderAPI = Bukkit.getPluginManager().getPlugin("PlaceholderAPI");
-        if (placeholderAPI != null && placeholderAPI.isEnabled()) {
+        if (placeholderAPI != null && placeholderAPI.isEnabled() && config.getBoolean("store-player-data")) {
             this.placeholderAPIEnabled = true;
             getLogger().info(pluginFound("PlaceholderAPI"));
         } else {
@@ -32,8 +34,7 @@ public final class Motivate extends JavaPlugin {
         }
 
         getServer().getPluginManager().registerEvents(new MotivateEvents(this), this);
-        loadConfig();
-        this.UUID_STORAGE = new MotivateUUIDStorage(this.getDataFolder());
+        this.UUID_STORAGE = new MotivateUUIDStorage(this.getDataFolder(), logger, config.getBoolean("store-player-data"));
 
         getLogger().info("MOTiVate enabled!");
 
@@ -209,11 +210,19 @@ public final class Motivate extends JavaPlugin {
     }
 
     public static String pluginNotFound(String name) {
-        return String.format(String.format("%s%s not found.%s", rgb(255, 0, 0), name, "\u001B[0m"));
+        return String.format("%s%s not found and/or disabled.%s", rgb(255, 0, 0), name, "\u001B[0m");
     }
 
     public static String pluginFound(String name) {
-        return String.format(String.format("%s%s found and hooked.%s", rgb(0, 255, 0), name, "\u001B[0m"));
+        return String.format("%s%s found and hooked.%s", rgb(0, 255, 0), name, "\u001B[0m");
+    }
+
+    public static String invalidUUID(String key) {
+        return String.format("%sInvalid encrypted UUID for key: %s%s", rgb(255, 0, 0), key, "\u001B[0m");
+    }
+
+    public static String savedUUID(String name) {
+        return String.format("%sSaved player data for new player %s%s", rgb(0, 255, 0), name, "\u001B[0m");
     }
 
     public void sendMessage(CommandSender sender, String message) {
